@@ -16,7 +16,8 @@ public class ManageServiceImpl extends ServiceImpl<ManageMapper, BaseCategory1> 
 
     @Override
     public List<BaseCategory1> getAll() {
-        return this.getAll();
+        List<BaseCategory1> list = manageMapper.selectList(null);
+        return list;
     }
 
 }
