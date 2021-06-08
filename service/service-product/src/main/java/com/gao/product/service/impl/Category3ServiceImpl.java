@@ -16,7 +16,7 @@ public class Category3ServiceImpl extends ServiceImpl<Category3Mapper, BaseCateg
     Category3Mapper category3Mapper;
     @Override
     public List<BaseCategory3> getCategory3(Long category2Id) {
-        List<BaseCategory3> list = ChainWrappers.lambdaQueryChain(category3Mapper).eq(BaseCategory3::getCategory2Id, category2Id).select().list();
+        List<BaseCategory3> list = ChainWrappers.lambdaQueryChain(category3Mapper).eq(BaseCategory3::getCategory2Id, category2Id).list();
         return list;
     }
 }

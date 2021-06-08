@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper SYSTEM "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gao.product.mapper.SpuSaleMapper">
+
+    <resultMap id="spuSaleAttrMap" type="com.gao.product.mapper.SpuSaleMapper" autoMapping="true">
+        <id property="id" column="id"></id>
+        <!--配置1:n-->
+        <collection property="spuSaleAttrValueList" ofType="com.gao.model.product.SpuSaleAttrValue" autoMapping="true">
+            <!--id 重复要起别名-->
+            <id property="id" column="sale_attr_value_id"></id>
+        </collection>
+
+    </resultMap>
+    <select id="getSpuSaleAttrListCheckBySku" resultMap ="spuSaleAttrMap">
+
+    </select>
+</mapper>
