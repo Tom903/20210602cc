@@ -10,12 +10,13 @@ import com.gao.model.product.SkuImage;
 import com.gao.model.product.SkuInfo;
 import com.gao.model.product.SkuSaleAttrValue;
 import com.gao.product.mapper.SkuAttrValueMapper;
-import com.gao.product.mapper.SkuImageMqpper;
+import com.gao.product.mapper.SkuImageMapper;
 import com.gao.product.mapper.SkuInfoMapper;
 import com.gao.product.mapper.SkuSaleAttrValueMapper;
 import com.gao.product.service.SkuInfoService;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -27,14 +28,15 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
     @Autowired
     private SkuInfoMapper skuInfoMapper;
     @Autowired
-    private SkuImageMqpper skuImageMapper;
+    private SkuImageMapper skuImageMapper;
     @Autowired
     private SkuAttrValueMapper skuAttrValueMapper;
     @Autowired
     private SkuSaleAttrValueMapper skuSaleAttrValueMapper;
 
+    @Override
     public void saveSkuInfo(SkuInfo skuInfo) {
-        skuInfoMapper.insert(skuInfo);
+
         List<SkuImage> list1 = skuInfo.getSkuImageList();
         if (!CollectionUtils.isEmpty(list1)) {
             for (SkuImage skuImage : list1) {
@@ -57,11 +59,13 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
                 skuSaleAttrValueMapper.insert(skuSaleAttrValue);
             }
         }
+        skuInfoMapper.insert(skuInfo);
     }
 
     @Override
     public IPage<SkuInfo> pageList(Page<SkuInfo> skuInfoPage) {
-        Page<SkuInfo> page = ChainWrappers.lambdaQueryChain(skuInfoMapper).orderByDesc().page(skuInfoPage);
+        Page<SkuInfo> page = ChainWrappers.lambdaQueryChain(skuInfoMapper)
+                .orderByDesc().page(skuInfoPage);
         return page;
     }
 
@@ -88,6 +92,10 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
     @Override
     public SkuInfo getSkuInfo(Long skuId) {
         SkuInfo skuInfo = skuInfoMapper.selectById(skuId);
+        List<SkuImage> list = skuImageMapper.selectOne(skuId);
+        if (!CollectionUtils.isEmpty(list)) {
+            skuInfo.setSkuImageList(list);
+        }
         return skuInfo;
     }
 
@@ -100,6 +108,4 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
             return new BigDecimal(0);
         }
     }
-
-
 }

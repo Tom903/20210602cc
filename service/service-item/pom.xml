@@ -18,14 +18,14 @@
             <version>1.0</version>
         </dependency>
     </dependencies>
-    <!--打包用 项目部署的时候-->
-    <!--    <build>-->
-    <!--        <finalName>service-item</finalName>-->
-    <!--        <plugins>-->
-    <!--            <plugin>-->
-    <!--                <groupId>org.springframework.boot</groupId>-->
-    <!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
-    <!--            </plugin>-->
-    <!--        </plugins>-->
-    <!--    </build>-->
+<!--    打包用 项目部署的时候-->
+<!--        <build>
+            <finalName>service-item</finalName>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                </plugin>
+            </plugins>
+        </build>-->
 </project>

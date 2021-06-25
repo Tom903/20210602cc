@@ -5,12 +5,12 @@ import com.gao.model.product.SkuInfo;
 import com.gao.model.product.SpuSaleAttr;
 import com.gao.product.service.CategoryViewService;
 import com.gao.product.service.SkuInfoService;
+import com.gao.product.service.SkuSaleAttrValuesService;
 import com.gao.product.service.SpuSaleService;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,27 +18,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("api/product")
-@EnableFeignClients
 public class ProductApiController {
-    @Autowired
-    private SkuInfoService skuInfoService;
+
+
     @Autowired
     private CategoryViewService categoryViewService;
     @Autowired
     private SpuSaleService spuSaleService;
-    /**
-     * 根据skuId获取sku信息
-     * @param skuId
-     * @return
-     */
-    @GetMapping("inner/getSkuInfo/{skuId}")
-    public SkuInfo getAttrValueList(@PathVariable("skuId") Long skuId){
-        return skuInfoService.getSkuInfo(skuId);
-    }
+    @Autowired
+    private SkuSaleAttrValuesService skuSaleAttrValuesService;
+    @Autowired
+    private SkuInfoService skuInfoService;
 
+    
     /**
      * 通过三级分类id查询分类信息
-     *
      * @param category3Id
      * @return
      */
@@ -48,7 +42,7 @@ public class ProductApiController {
     }
 
     /**
-     * 根据skuId 获取最新价格
+     * 根据skuId获取最新价格
      * @param skuId
      * @return
      */
@@ -68,4 +62,23 @@ public class ProductApiController {
                                                           @PathVariable Long spuId){
         return spuSaleService.getSpuSaleAttrListCheckBySku(skuId,spuId);
     }
+    /**
+     * 根据spuId 查询map 集合属性
+     * @param spuId
+     * @return
+     */
+    @GetMapping("inner/getSkuValueIdsMap/{spuId}")
+    public Map getSkuValueIdsMap(@PathVariable Long spuId) {
+        return skuSaleAttrValuesService.getSkuValueIdsMap(spuId);
+    }
+    /**
+     * 根据skuId获取sku信息
+     * @param skuId
+     * @return
+     */
+    @GetMapping("inner/getSkuInfo/{skuId}")
+    public SkuInfo getSkuInfo(@PathVariable Long skuId) {
+        return skuInfoService.getSkuInfo(skuId);
+    }
+
 }

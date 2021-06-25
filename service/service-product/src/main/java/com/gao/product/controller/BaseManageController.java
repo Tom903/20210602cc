@@ -27,7 +27,6 @@ import com.gao.product.service.SpuInfoService;
 import com.gao.product.service.SpuSaleService;
 import com.gao.product.service.TrademarkService;
 import io.swagger.annotations.Api;
-import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -37,13 +36,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Api(tags = "后台数据接口")
 @RestController
 @RequestMapping("admin/product")
-@CrossOrigin
 public class BaseManageController {
 
     @Autowired
@@ -133,20 +132,13 @@ public class BaseManageController {
 
     /**
      * 新增和修改
-     * http://api.gmall.com/admin/product/saveAttrInfo{baseAttrInfo}
+     * http://api.gmall.com/admin/product/saveAttrInfo
      *
      * @param baseAttrInfo
      * @return
      */
-    @PostMapping("saveAttrInfo/{baseAttrInfo}")
-    public Result saveAttrInfo(@PathVariable BaseAttrInfo baseAttrInfo) {
-        if (StringUtils.isEmpty(baseAttrInfo)) {
-            throw new GmallException("请求参数为空", 100);
-        }
-        if (!StringUtils.isEmpty(baseAttrInfo.getId())) {
-            attrInfoService.updateById(baseAttrInfo);
-            return Result.ok();
-        }
+    @PostMapping("saveAttrInfo")
+    public Result saveAttrInfo(@RequestBody BaseAttrInfo baseAttrInfo) {
         attrInfoService.saveAttrInfo(baseAttrInfo);
         return Result.ok();
     }
@@ -154,7 +146,6 @@ public class BaseManageController {
     /**
      * 根据平台属性ID获取平台属性对象数据
      * //http://api.gmall.com/admin/product/getAttrValueList/{attrId}
-     *
      * @param attrId
      * @return
      */
@@ -169,26 +160,23 @@ public class BaseManageController {
      * springMVC 的时候，有个叫对象属性传值 如果页面提交过来的参数与实体类的参数一致，
      * 则可以使用实体类来接收数据
      * http://api.gmall.com/admin/product/1/10?category3Id=61
-     *
      * @param page
      * @param size
-     * @param category3Id
      * @return
      * @RequestBody 作用 将前台传递过来的json{"category3Id":"61"}  字符串变为java 对象。
      */
-    @GetMapping("{page}/{size}/{category3Id}")
+    @GetMapping("{page}/{size}")
     public Result getSpuInfoPage(@PathVariable Long page,
                                  @PathVariable Long size,
-                                 @PathVariable Long category3Id) {
+                                 SpuInfo spuInfo) {
         Page<SpuInfo> page1 = new Page<>(page, size);
-        IPage<SpuInfo> list = spuInfoService.getSpuInfoPage(page1, category3Id);
+        IPage<SpuInfo> list = spuInfoService.getSpuInfoPage(page1, spuInfo);
         return Result.ok(list);
     }
 
     /**
      * 获取销售属性
      * http://api.gmall.com/admin/product/baseSaleAttrList
-     *
      * @return
      */
     @GetMapping("baseSaleAttrList")
@@ -197,11 +185,9 @@ public class BaseManageController {
         return Result.ok(list);
     }
 
-
     /**
      * 获取品牌属性
      * http://api.gmall.com/admin/product/baseTrademark/getTrademarkList
-     *
      * @return
      */
     @GetMapping("baseTrademark/getTrademarkList")
@@ -212,13 +198,12 @@ public class BaseManageController {
 
     /**
      * 添加spu
-     * http://api.gmall.com/admin/product/saveSpuInfo/{spuInfo}
-     *
+     * http://api.gmall.com/admin/product/saveSpuInfo
      * @param spuInfo
      * @return
      */
-    @PostMapping("saveSpuInfo/{spuInfo}")
-    public Result saveSpuInfo(@PathVariable SpuInfo spuInfo) {
+    @PostMapping("saveSpuInfo")
+    public Result saveSpuInfo(@RequestBody SpuInfo spuInfo) {
         if (StringUtils.isEmpty(spuInfo)) {
             throw new GmallException("请求参数为空", 100);
         }
@@ -229,7 +214,6 @@ public class BaseManageController {
     /**
      * 根据spuId获取图片列表
      * http://api.gmall.com/admin/product/spuImageList/{spuId}
-     *
      * @param spuId
      * @return
      */
@@ -243,7 +227,6 @@ public class BaseManageController {
     /**
      * 根据spuId获取销售属性
      * http://api.gmall.com/admin/product/spuSaleAttrList/{spuId}
-     *
      * @param spuId
      * @return
      */
@@ -256,15 +239,11 @@ public class BaseManageController {
     /**
      * 添加sku
      * http://api.gmall.com/admin/product/saveSkuInfo
-     *
      * @param skuInfo
      * @return
      */
-    @PostMapping("saveSkuInfo/{skuInfo}")
-    public Result saveSkuInfo(@PathVariable SkuInfo skuInfo) {
-        if (StringUtils.isEmpty(skuInfo)) {
-            throw new GmallException("请求参数为空", 100);
-        }
+    @PostMapping("saveSkuInfo")
+    public Result saveSkuInfo(@RequestBody SkuInfo skuInfo) {
         skuInfoService.saveSkuInfo(skuInfo);
         return Result.ok();
     }
@@ -272,7 +251,6 @@ public class BaseManageController {
     /**
      * 获取sku分页列表
      * http://api.gmall.com/admin/product/list/{page}/{limit}
-     *
      * @param page
      * @param limit
      * @return
@@ -288,7 +266,6 @@ public class BaseManageController {
     /**
      * http://api.gmall.com/admin/product/onSale/{skuId}
      * 上架
-     *
      * @param skuId
      * @return
      */
@@ -302,7 +279,6 @@ public class BaseManageController {
     /**
      * 下架
      * http://api.gmall.com/admin/product/cancelSale/{skuId}
-     *
      * @param skuId
      * @return
      */
@@ -315,7 +291,6 @@ public class BaseManageController {
     /**
      * 获取品牌分页列表
      * http://api.gmall.com/admin/product/baseTrademark/{page}/{limit}
-     *
      * @param page
      * @param limit
      * @return
@@ -331,15 +306,11 @@ public class BaseManageController {
     /**
      * http://api.gmall.com/admin/product/baseTrademark/save
      * 添加品牌
-     *
      * @param baseTrademark
      * @return
      */
-    @PostMapping("baseTrademark/save/{baseTrademark}")
-    public Result save(@PathVariable BaseTrademark baseTrademark) {
-        if (StringUtils.isEmpty(baseTrademark)) {
-            throw new GmallException("请求参数为空", 100);
-        }
+    @PostMapping("baseTrademark/save")
+    public Result save(@RequestBody BaseTrademark baseTrademark) {
         trademarkService.save(baseTrademark);
         return Result.ok();
     }
@@ -348,8 +319,8 @@ public class BaseManageController {
      * http://api.gmall.com/admin/product/baseTrademark/update
      * 修改品牌
      */
-    @PutMapping("baseTrademark/update/{baseTrademark}")
-    public Result update(@PathVariable BaseTrademark baseTrademark) {
+    @PutMapping("baseTrademark/update")
+    public Result update(@RequestBody BaseTrademark baseTrademark) {
         if (StringUtils.isEmpty(baseTrademark)) {
             throw new GmallException("请求参数为空", 100);
         }
@@ -382,6 +353,9 @@ public class BaseManageController {
     }
 
 
-
-
+    @DeleteMapping("baseTrademark/{id}")
+    public Result deleteById(@PathVariable Long id) {
+        trademarkService.delete(id);
+        return Result.ok();
+    }
 }

@@ -31,12 +31,17 @@ public class TrademarkServiceImpl extends ServiceImpl<TrademarkMapper, BaseTrade
 
     @Override
     public void updateBaseTrademark(BaseTrademark baseTrademark) {
-        ChainWrappers.lambdaUpdateChain(trademarkMapper).update(baseTrademark);
+        ChainWrappers.lambdaUpdateChain(trademarkMapper).eq(BaseTrademark::getId,baseTrademark.getId()).update(baseTrademark);
     }
 
     @Override
     public void deleteById(Long id) {
         trademarkMapper.deleteById(id);
+    }
+
+    @Override
+    public void delete(Long id) {
+        ChainWrappers.lambdaUpdateChain(trademarkMapper).eq(BaseTrademark::getId, id).remove();
     }
 
 }

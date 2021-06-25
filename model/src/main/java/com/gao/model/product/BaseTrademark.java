@@ -1,5 +1,6 @@
 package com.gao.model.product;
 
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.gao.model.base.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -11,15 +12,14 @@ import lombok.Data;
  * <p>
  * BaseTrademark
  * </p>
- *
  */
 @Data
 @ApiModel(description = "商标品牌")
 @TableName("base_trademark")
 public class BaseTrademark extends BaseEntity {
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	@ApiModelProperty(value = "属性值")
 	@TableField("tm_name")
 	private String tmName;

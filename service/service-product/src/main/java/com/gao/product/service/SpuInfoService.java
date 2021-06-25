@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.gao.model.product.SpuInfo;
 
 public interface SpuInfoService extends IService<SpuInfo> {
-    IPage<SpuInfo> getSpuInfoPage(Page<SpuInfo> page1, Long category3Id);
+    IPage<SpuInfo> getSpuInfoPage(Page<SpuInfo> page1, SpuInfo spuInfo);
 
     void saveSpuInfo(SpuInfo spuInfo);
 }

@@ -16,4 +16,5 @@ public interface TrademarkService extends IService<BaseTrademark> {
 
     void deleteById(Long id);
 
+    void delete(Long id);
 }
